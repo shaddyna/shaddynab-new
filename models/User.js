@@ -86,7 +86,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['customer', 'admin'],
+    enum: ['customer', 'admin', 'seller'],
     default: 'customer'
   },
   isActive: {
@@ -103,6 +103,10 @@ const userSchema = new mongoose.Schema({
   updatedAt: {
     type: Date,
     default: Date.now
+  },
+    shop: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Shop'
   }
 });
 

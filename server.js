@@ -26,7 +26,8 @@ app.use(express.static(path.join(__dirname, 'temp/uploads')));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/membership', require('./routes/sellerRequestRoutes'));
-
+app.use('/api/skills', require('./routes/skillRoutes'));
+app.use('/api/shops', require('./routes/shopRoutes'));
 
 // Sample route
 app.get("/", (req, res) => {

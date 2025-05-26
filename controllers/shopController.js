@@ -181,3 +181,11 @@ exports.deleteShop = async (req, res, next) => {
     next(err);
   }
 };
+// ✅ Make sure this function is exported
+exports.getMyShop = async (req, res) => {
+  const shop = await Shop.findOne({ owner: req.user.id });
+  if (!shop) {
+    return res.status(404).json({ message: "Shop not found" });
+  }
+  res.status(200).json({ success: true, data: shop });
+};

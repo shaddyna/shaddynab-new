@@ -15,3 +15,4 @@ router.route('/:id')
   .delete(authenticate, authorize('seller'), deleteSkill);
 
 module.exports = router;
+

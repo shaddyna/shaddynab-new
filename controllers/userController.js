@@ -111,6 +111,7 @@ exports.loginUser = async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       role: user.role,
+      member: user.member,
       createdAt: user.createdAt,
       token
     };
@@ -155,8 +156,6 @@ exports.registerUser = async (req, res) => {
 
     await user.save();
 
-    // In a real app, you would send a verification email here
-
     // Return user info (without password)
     const userResponse = {
       _id: user._id,
@@ -191,6 +190,7 @@ const formatUserResponse = (user) => {
     isActive: user.isActive,
     lastLogin: user.lastLogin,
     createdAt: user.createdAt,
+    member: user.member,
     updatedAt: user.updatedAt
   };
 };

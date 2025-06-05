@@ -28,6 +28,7 @@ app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/membership', require('./routes/sellerRequestRoutes'));
 app.use('/api/skills', require('./routes/skillRoutes'));
 app.use('/api/shops', require('./routes/shopRoutes'));
+app.use('/api/members', require('./routes/memberRequestRoutes'));
 
 // Sample route
 app.get("/", (req, res) => {

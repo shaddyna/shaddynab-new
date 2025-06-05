@@ -23,16 +23,32 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Password is required'],
-    minlength: [8, 'Password must be at least 8 characters long']
+    minlength: [8, 'Password must be at least 8 characters long'],
+    select: false
   },
   role: {
     type: String,
-    enum: ['customer', 'admin'],
+    enum: ['customer', 'admin', 'seller'],
     default: 'customer'
+  },
+  isActive: {
+    type: Boolean,
+    default: true
+  },
+  lastLogin: {
+    type: Date
   },
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  },
+    shop: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Shop'
   }
 });
 
@@ -47,6 +63,12 @@ userSchema.pre('save', async function(next) {
   } catch (error) {
     next(error);
   }
+});
+
+// Update timestamp on save
+userSchema.pre('save', function(next) {
+  this.updatedAt = Date.now();
+  next();
 });
 
 // Method to compare passwords
@@ -93,6 +115,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
+  member: {
+    type: Boolean,
+    default: false  // 👈 Default to false unless set
+  },
   lastLogin: {
     type: Date
   },
@@ -104,7 +130,7 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-    shop: {
+  shop: {
     type: mongoose.Schema.ObjectId,
     ref: 'Shop'
   }

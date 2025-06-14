@@ -2,39 +2,6 @@ const Skill = require('../models/Skill');
 const cloudinary = require('cloudinary').v2;
 const ErrorResponse = require('../utils/errorResponse');
 
-// @desc    Create new skill
-// @route   POST /api/skills
-// @access  Private/Seller
-/*exports.createSkill = async (req, res, next) => {
-  try {
-    // Add user to req.body
-    req.body.user = req.user.id;
-
-    // Upload images to Cloudinary
-    const imageUrls = [];
-    for (const file of req.files) {
-      const result = await cloudinary.uploader.upload(
-        `data:${file.mimetype};base64,${file.buffer.toString('base64')}`,
-        {
-          folder: 'skills',
-          resource_type: 'auto'
-        }
-      );
-      imageUrls.push(result.secure_url);
-    }
-
-    req.body.images = imageUrls;
-
-    const skill = await Skill.create(req.body);
-
-    res.status(201).json({
-      success: true,
-      data: skill
-    });
-  } catch (err) {
-    next(err);
-  }
-};*/
 exports.createSkill = async (req, res, next) => {
   try {
     // Log incoming files and body
@@ -139,6 +106,23 @@ exports.updateSkill = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: skill
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @desc    Get all skills by a specific user
+// @route   GET /api/skills/user/:userId
+// @access  Public
+exports.getSkillsByUser = async (req, res, next) => {
+  try {
+    const skills = await Skill.find({ user: req.params.userId }).populate('user', 'firstName lastName');
+
+    res.status(200).json({
+      success: true,
+      count: skills.length,
+      data: skills
     });
   } catch (err) {
     next(err);

@@ -37,7 +37,8 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const { userRegisterValidator, userLoginValidator } = require('../middleware/validators');
-const { authenticate, authorize } = require('../middleware/auth');
+const { authenticate } = require('../middleware/auth');
+const { isAdmin } = require('../middleware/roleMiddleware');
 
 // Public routes
 router.post('/register', userRegisterValidator, userController.registerUser);
@@ -51,7 +52,8 @@ router.get('/me', userController.getCurrentUser);
 router.put('/me', userController.updateCurrentUser);
 
 // Admin-only routes
-router.use(authorize('admin'));
+//router.use(isAdmin('admin'));
+router.use(isAdmin);
 
 router.get('/', userController.getAllUsers);
 router.get('/:id', userController.getUser);

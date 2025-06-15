@@ -28,8 +28,11 @@ app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/membership', require('./routes/sellerRequestRoutes'));
 app.use('/api/skills', require('./routes/skillRoutes'));
 app.use('/api/shops', require('./routes/shopRoutes'));
-app.use('/api/members', require('./routes/memberRequestRoutes'));
+app.use('/api/membersrequests', require('./routes/memberRequestRoutes'));
 app.use('/api/inquiries', require('./routes/inquiryRoutes'));
+app.use('/api/members', require('./routes/memberRoutes'));
+app.use('/api/sellers', require('./routes/sellerRoutes'));
+
 
 // Sample route
 app.get("/", (req, res) => {

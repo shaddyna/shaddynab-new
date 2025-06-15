@@ -197,7 +197,7 @@ const formatUserResponse = (user) => {
 
 // @desc    Get all users (Admin only)
 // @route   GET /api/users
-exports.getAllUsers = async (req, res) => {
+/*exports.getAllUsers = async (req, res) => {
   try {
     // Pagination
     const page = parseInt(req.query.page) || 1;
@@ -235,7 +235,54 @@ exports.getAllUsers = async (req, res) => {
     console.error(err.message);
     res.status(500).json({ errors: [{ msg: 'Server error' }] });
   }
+};*/
+exports.getAllUsers = async (req, res) => {
+  try {
+    // Pagination
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    // Search/filter
+    const query = {};
+    if (req.query.role) query.role = req.query.role;
+    if (req.query.search) {
+      query.$or = [
+        { firstName: { $regex: req.query.search, $options: 'i' } },
+        { lastName: { $regex: req.query.search, $options: 'i' } },
+        { email: { $regex: req.query.search, $options: 'i' } }
+      ];
+    }
+
+    const users = await User.find(query)
+      .select('-password')
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    const total = await User.countDocuments(query);
+
+    console.log(`[SUCCESS] Retrieved ${users.length} users out of ${total} total.`);
+
+    res.status(200).json({
+      success: true,
+      message: 'Users retrieved successfully',
+      count: users.length,
+      total,
+      pages: Math.ceil(total / limit),
+      currentPage: page,
+      data: users.map(formatUserResponse)
+    });
+  } catch (err) {
+    console.error(`[ERROR] Failed to retrieve users: ${err.message}`);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve users',
+      errors: [{ msg: 'Server error' }]
+    });
+  }
 };
+
 
 // @desc    Get single user (Admin only)
 // @route   GET /api/users/:id
